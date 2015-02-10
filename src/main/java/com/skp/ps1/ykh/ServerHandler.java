@@ -55,9 +55,8 @@ public class ServerHandler extends SimpleChannelInboundHandler<DefaultHttpReques
     		handleRtspPLAYMethod(ctx,request);
     	else if(request.getMethod().equals(RtspMethods.PAUSE))
     		handleRtspPAUSEMethod(ctx,request);
-    	else{
-    		System.err.println("exception in TailInboundHandler()");
-    	}
+    	else
+    		System.err.println("Exception in ServerHandler");
     }
 
 	private void handleRtspTEARDOWNMethod(ChannelHandlerContext ctx, DefaultHttpRequest request) {
