@@ -34,7 +34,7 @@ public class RtpPacketization implements Runnable {
 		try {
 			MP4Reader mp4Reader = new MP4Reader(new File(filePath));
 			ITag tag = null;
-			int mp4FrameSize = mp4Reader.getFramesTotalSize();	// 직접 만든 getFramesTotalSize()로 비디오+오디오 프레임 수를 리턴한다.
+			int mp4FrameSize = mp4Reader.getFramesTotalSize();	// frame count(video+audio) return.
 			Short sequenceNumber = 10000;
 			
 			for (int t = 0; t < mp4FrameSize; t++) {
@@ -42,18 +42,11 @@ public class RtpPacketization implements Runnable {
 				log.debug("Tag\n{}",tag);
 				IoBuffer body = tag.getBody();
 				
-				/***
-				 * 
-				 * RTP over TCP
-				 * 
-				 */
-				//int bodyLength = tag.getBodySize();
-				//short rtpLength = (short)(bodyLength+12);			// short(2byte) header(12)+payload(getBodySize())
 				short rtpLength = (short)(body.limit()+12);
 				ByteBuf buffer = Unpooled.buffer(); 
 
-				byte magicNumber = (byte)0x24;					// 1byte magic number 0x24
-				byte channelNumber = (byte)0x00;				// 1byte channel number 0x00(RTP)
+				byte magicNumber = (byte)0x24;			// 1byte magic number 0x24
+				byte channelNumber = (byte)0x00;		// 1byte channel number 0x00(RTP)
 				buffer.writeByte(magicNumber);
 				System.err.println(ByteBufUtil.hexDump(buffer));
 				
